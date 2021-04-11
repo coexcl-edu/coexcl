@@ -1,0 +1,23 @@
+const express = require('express')
+const mongoose = require('mongoose')
+//const url = "mongodb://localhost:27017/coexcldb";
+
+const url = "mongodb+srv://coexcl:coexcl@cluster0.9nvpj.mongodb.net/coexcldb";
+
+const app = express()
+
+mongoose.connect(url, {useNewUrlParser:true,useUnifiedTopology: true })
+const con = mongoose.connection
+
+con.on('open', () => {
+    console.log('connected...')
+})
+
+app.use(express.json())
+
+const userRouter = require('./routes/aliens')
+app.use('/users',userRouter)
+
+app.listen(9000, () => {
+    console.log('Server started')
+})
