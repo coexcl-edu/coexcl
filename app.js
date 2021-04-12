@@ -1,6 +1,7 @@
 const express = require('express')
 const mongoose = require('mongoose')
 //const url = "mongodb://localhost:27017/coexcldb";
+const port= process.env.port || 9000;
 
 const url = "mongodb+srv://coexcl:coexcl@cluster0.9nvpj.mongodb.net/coexcldb";
 
@@ -18,6 +19,6 @@ app.use(express.json())
 const userRouter = require('./routes/aliens')
 app.use('/users',userRouter)
 
-app.listen(9000, () => {
+app.listen(port, () => {
     console.log('Server started')
 })
