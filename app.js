@@ -14,6 +14,11 @@ con.on('open', () => {
     console.log('connected...')
 })
 
+app.get('/welcome', async(req,res) => {
+  
+        res.send('WELCOME to Node JS Application');
+        
+});
 app.use(express.json())
 
 const userRouter = require('./routes/aliens')
