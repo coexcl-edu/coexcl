@@ -2,6 +2,7 @@ const express = require('express')
 const mongoose = require('mongoose')
 //const url = "mongodb://localhost:27017/coexcldb";
 const port= process.env.port || 8080;
+app.use(express.json());
 
 const url = "mongodb+srv://coexcl:coexcl@cluster0.9nvpj.mongodb.net/coexcldb";
 
@@ -14,12 +15,12 @@ const con = mongoose.connection
     console.log('connected...')
 })
 
-app.get('/welcome', async(req,res) => {
+app.get('/welcome', (req,res) => {
   
         res.send('WELCOME to Node JS Application');
         
 }); */
-app.use(express.json());
+
 
 app.get('/', (req, res) => {
   res.send('Hello from App Engine!');
