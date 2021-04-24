@@ -23,7 +23,7 @@ app.get('/welcome', (req,res) => {
 
 
 app.get('/', (req, res) => {
-  res.send('Hello from App Engine!');
+ res.status(200).send('Hello, world!').end();
 });
 
 /*const userRouter = require('./routes/aliens')
