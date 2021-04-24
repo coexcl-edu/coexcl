@@ -10,7 +10,7 @@ const app = express()
 mongoose.connect(url, {useNewUrlParser:true,useUnifiedTopology: true })
 const con = mongoose.connection
 
-con.on('open', () => {
+/*con.on('open', () => {
     console.log('connected...')
 })
 
@@ -18,15 +18,15 @@ app.get('/welcome', async(req,res) => {
   
         res.send('WELCOME to Node JS Application');
         
-});
+}); */
 app.use(express.json());
 
 app.get('/', (req, res) => {
   res.send('Hello from App Engine!');
 });
 
-const userRouter = require('./routes/aliens')
-app.use('/users',userRouter)
+/*const userRouter = require('./routes/aliens')
+app.use('/users',userRouter) */
 
 app.listen(port, () => {
     console.log('Server started')
