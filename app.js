@@ -31,3 +31,5 @@ app.use('/users',userRouter) */
 app.listen(port, () => {
     console.log('Server started')
 })
+
+module.exports = app;
