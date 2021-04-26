@@ -31,7 +31,7 @@ const userRouter = require('./routes/userRouter')
 app.use('/users',userRouter)
 
 const videoRouter = require('./routes/videoRoute')
-app.use('/video',videoRouter)
+app.use('/videos',videoRouter)
 
 
 const PORT = process.env.PORT || 8080;
