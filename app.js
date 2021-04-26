@@ -27,11 +27,11 @@ app.get('/', (req, res) => {
   res.status(200).send('Hello, world!').end();
 });
 
-const userRouter = require('./routes/userRoute')
+const userRouter = require('./routes/aliens')
 app.use('/users',userRouter)
 
-const videoRouter = require('./routes/videoRoute')
-app.use('/videos',videoRouter)
+//const videoRouter = require('./routes/videoRoute')
+//app.use('/videos',videoRouter)
 
 
 const PORT = process.env.PORT || 8080;

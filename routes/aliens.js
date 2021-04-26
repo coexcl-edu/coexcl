@@ -1,6 +1,6 @@
 const express = require('express')
 const router = express.Router()
-const User = require('../models/userModel')
+const User = require('../models/user')
 
 
 router.get('/', async(req,res) => {
@@ -43,9 +43,9 @@ console.log(alien);
 
 router.patch('/:id',async(req,res)=> {
     try{
-        const user = await User.findById(req.params.id); 
-        user.sub = req.body.sub;
-        const a1 = await user.save();
+        const alien = await Alien.findById(req.params.id); 
+        alien.sub = req.body.sub;
+        const a1 = await alien.save();
         res.json(a1);
     }catch(err){
         res.send('Error')
