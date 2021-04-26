@@ -1,24 +1,24 @@
 const express = require('express')
 const router = express.Router()
-const User = require('../models/user')
+const Video = require('../models/videoModel')
 
 
 router.get('/', async(req,res) => {
     try{
-           const aliens = await User.find();
-           console.log("Inside Users details");
-res.json(aliens);
+           const links = await Video.find();
+           console.log("Inside Video details");
+res.json(links);
     }catch(err){
         res.send('Error ' + err);
     }
 })
 
-router.get('/:mobile', async(req,res) => {
+router.get('/:class', async(req,res) => {
     try{
-        var query = { mobile: req.params.mobile };
-           const user=await User.findOne(query);
-           console.log("Inside User details of mobile No :"+req.params.mobile);
-res.json(user)
+        var query = { mobile: req.params.class };
+           const link=await Video.findOne(query);
+           console.log("Inside Links of Class :"+req.params.class);
+res.json(link)
     }catch(err){
         res.send('Error ' + err)
     }
@@ -26,15 +26,16 @@ res.json(user)
 
 
 router.post('/', async(req,res) => {
-    const alien = new User({
-        name: req.body.name,
-        mobile : req.body.mobile,
-        schoolname: req.body.schoolname,
-        sub: req.body.subscribed
+    const link = new Video({
+        subject: req.body.subject,
+        class : req.body.class,
+        chaptername: req.body.chaptername,
+        board: req.body.board,
+        url: req.body.url
     })
-console.log(alien);
+console.log(link);
     try{
-        const a1 =  await alien.save() 
+        const a1 =  await link.save() 
         res.json(a1)
     }catch(err){
         res.send('Error')
