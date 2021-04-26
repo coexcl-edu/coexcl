@@ -43,9 +43,9 @@ console.log(alien);
 
 router.patch('/:id',async(req,res)=> {
     try{
-        const alien = await Alien.findById(req.params.id); 
-        alien.sub = req.body.sub;
-        const a1 = await alien.save();
+        const user = await User.findById(req.params.id); 
+        user.sub = req.body.sub;
+        const a1 = await user.save();
         res.json(a1);
     }catch(err){
         res.send('Error')

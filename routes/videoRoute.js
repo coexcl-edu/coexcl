@@ -44,9 +44,9 @@ console.log(link);
 
 router.patch('/:id',async(req,res)=> {
     try{
-        const alien = await Alien.findById(req.params.id); 
-        alien.sub = req.body.sub;
-        const a1 = await alien.save();
+        const link = await Video.findById(req.params.id); 
+        link.sub = req.body.sub;
+        const a1 = await link.save();
         res.json(a1);
     }catch(err){
         res.send('Error')
