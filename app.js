@@ -30,8 +30,8 @@ app.get('/', (req, res) => {
 const userRouter = require('./routes/userRoute')
 app.use('/users',userRouter)
 
-const videoRouter = require('./routes/videoRoute')
-app.use('/videos',videoRouter)
+//const videoRouter = require('./routes/videoRoute')
+//app.use('/videos',videoRouter)
 
 
 const PORT = process.env.PORT || 8080;
