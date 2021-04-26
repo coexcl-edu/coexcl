@@ -15,7 +15,7 @@ res.json(links);
 
 router.get('/:class', async(req,res) => {
     try{
-        var query = { mobile: req.params.class };
+        var query = { class: req.params.class };
            const link=await Video.findOne(query);
            console.log("Inside Links of Class :"+req.params.class);
 res.json(link)
