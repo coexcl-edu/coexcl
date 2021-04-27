@@ -5,11 +5,10 @@ const User = require('../models/user')
 
 router.get('/', async(req,res) => {
     try{
-           const aliens = await User.find();
-           console.log("Inside Users details");
-res.json(aliens);
+           const aliens = await User.find()
+           res.json(aliens)
     }catch(err){
-        res.send('Error ' + err);
+        res.send('Error ' + err)
     }
 })
 
@@ -17,8 +16,7 @@ router.get('/:mobile', async(req,res) => {
     try{
         var query = { mobile: req.params.mobile };
            const user=await User.findOne(query);
-           console.log("Inside User details of mobile No :"+req.params.mobile);
-res.json(user)
+           res.json(user)
     }catch(err){
         res.send('Error ' + err)
     }
@@ -43,10 +41,10 @@ console.log(alien);
 
 router.patch('/:id',async(req,res)=> {
     try{
-        const alien = await User.findById(req.params.id); 
-        alien.sub = req.body.sub;
-        const a1 = await alien.save();
-        res.json(a1);
+        const alien = await Alien.findById(req.params.id) 
+        alien.sub = req.body.sub
+        const a1 = await alien.save()
+        res.json(a1)   
     }catch(err){
         res.send('Error')
     }
