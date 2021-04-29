@@ -30,6 +30,11 @@ app.get('/', (req, res) => {
 const userRouter = require('./routes/aliens')
 app.use('/users',userRouter)
 
+const videoRouter = require('./routes/videoRoute')
+app.use('/videos',videoRouter)
+
+const loginRouter = require('./routes/loginRoute')
+app.use('/login',loginRouter)
 
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
