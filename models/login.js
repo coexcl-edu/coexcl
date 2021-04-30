@@ -13,6 +13,8 @@ const loginSchema = new mongoose.Schema({
         required: true
     }
 
-})
+}
+//,{ _id : false }
+)
 
 module.exports = mongoose.model('Login',loginSchema)

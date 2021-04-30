@@ -1,6 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const Login = require('../models/login')
+const crypt = require("./crypt");
 
 
 router.post('/', async(req,res) => {
@@ -19,16 +20,16 @@ console.log(login);
 
 
 router.post('/validuser', async(req,res) => {
-	const inputmob=req.body.mobile;
-	console.log("mobile ::"+inputmob);
     const checklogin = new Login({
+        _id : undefined,
         mobile : req.body.mobile,
         password: req.body.password
     })
-console.log(checklogin);
+    checklogin._id=undefined;
+   console.log(checklogin._id)
     try{
       const loginfound=await Login.findOne(checklogin);
-	  console.log("result::"+checklogin);
+	  console.log("result::"+loginfound);
            res.status(200).json(loginfound)
     }catch(err){
         res.send('Error')
@@ -46,5 +47,15 @@ router.patch('/:id',async(req,res)=> {
     }
 
 })
+
+
+function replacer(key,value)
+{
+    if (key=="_id") return undefined;
+    else return value;
+}
+
+
+  
 
 module.exports = router
