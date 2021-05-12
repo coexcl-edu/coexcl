@@ -14,6 +14,7 @@ function encryptpwd(pwdtoencrpyt) {
   function decryptpwd(pwdtodecrpyt) {
     let decipher = CryptoJS.AES.decrypt(pwdtodecrpyt, key);
     decipher = decipher.toString(CryptoJS.enc.Utf8);
+    return decipher;
   }
 
   module.exports = { encryptpwd, decryptpwd };

@@ -28,7 +28,7 @@ app.get('/', (req, res) => {
   res.status(200).send('Hello, world!').end();
 });
 
-const userRouter = require('./routes/aliens')
+const userRouter = require('./routes/userRoute')
 app.use('/users',userRouter)
 
 const videoRouter = require('./routes/videoRoute')
@@ -36,6 +36,12 @@ app.use('/videos',videoRouter)
 
 const loginRouter = require('./routes/loginRoute')
 app.use('/login',loginRouter)
+
+const noteRouter = require('./routes/noteRoute')
+app.use('/notes',noteRouter)
+
+const quizRouter = require('./routes/quizRoute')
+app.use('/quiz',quizRouter)
 
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
