@@ -43,6 +43,9 @@ app.use('/notes',noteRouter)
 const quizRouter = require('./routes/quizRoute')
 app.use('/quiz',quizRouter)
 
+const schoolRouter = require('./routes/schoolRoute')
+app.use('/school',schoolRouter)
+
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
   console.log(`App listening on port ${PORT}`);

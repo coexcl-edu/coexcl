@@ -1,33 +1,31 @@
 const mongoose = require('mongoose')
 
 
-const videoSchema = new mongoose.Schema({
+const schoolSchema = new mongoose.Schema({
 
+   
     schoolcode: {
         type: String,
         required: true
     },
-    subject: {
+    schoolname: {
         type: String,
         required: true
     },
-    class: {
-        type: Number,
-        required: true
-    },
-    chaptername: {
+    city : {
         type: String,
         required: true
     },
-    board: {
+    state: {
         type: String,
         required: true
     },
-    url: {
+    logourl :{
         type: String,
-        required: true
+        required: false
     }
 
-})
+}
+)
 
-module.exports = mongoose.model('Video',videoSchema)
+module.exports = mongoose.model('School',schoolSchema)

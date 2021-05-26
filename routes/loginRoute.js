@@ -34,15 +34,32 @@ router.post('/validuser', async(req,res) => {
      var dbPwd= crypt.decryptpwd(loginfound.password);
 	  console.log("result::"+loginfound);
 
-      if(req.body.password==dbPwd)
+      console.log("Body Passwrod::"+req.body.password)
+      console.log("Pwd::"+loginfound.password)
+      console.log("dbPwd::"+crypt.decryptpwd(loginfound.password))
+      if(req.body.password==crypt.decryptpwd(loginfound.password))
       {
        const userDtls=await User.findOne({mobile: req.body.mobile})
         const resp={userId: loginfound._id,
              userDtls}
-           res.status(200).json(resp)
-        }
+
+             outRes={
+                response : true,
+                status : 200,
+                data : {
+                    userDtls}
+            }
+           res.status(200).json(outRes)
+      }
            else
-            res.status(401).json("Invalid User")
+           {
+            outRes={
+                response : true,
+                status : 401,
+                data : "Invaid User"
+            }
+            res.status(401).json(outRes)
+        }
     }catch(err){
         res.status(500).send('Error')
     }

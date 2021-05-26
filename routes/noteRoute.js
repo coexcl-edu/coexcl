@@ -35,12 +35,11 @@ router.patch('/', async(req,res) => {
         _id : req.body.noteId,
     }
     try{
-     console.log("Patching");
       const note=await Notes.findOne(Note);
       console.log(note);
       note.description=req.body.description;
       const noteOutput=await note.save();
-           res.status(200).json(noteOutput)
+        res.status(200).json(noteOutput)
     }catch(err){
         res.send('Error')
     }

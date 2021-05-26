@@ -11,6 +11,10 @@ const userSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
+    userid : {
+        type: String,
+        required: true
+    },
     subscribed: {
         type: Boolean,
         required: true,
@@ -22,12 +26,20 @@ const userSchema = new mongoose.Schema({
     },
 	personalInfo :
             {
+                gender: {
+                    type: String,
+                    required: false
+                },
                 fatherName: {
                     type: String,
                     required: false
                 },
                 motherName: {
                     type: String,
+                    required: false
+                },
+                parentContact: {
+                    type: Number,
                     required: false
                 },
                 bloodGroup: {
@@ -47,11 +59,11 @@ const userSchema = new mongoose.Schema({
             {
                 class: {
                     type: String,
-                    required: true
+                    required: false
                 },
                 rollNo: {
                     type: Number,
-                    required: true
+                    required: false
                 },
                 favouriteSubject: {
                     type: String,
@@ -75,8 +87,25 @@ const userSchema = new mongoose.Schema({
                 state: {
                     type : String,
                     required : false
+                },
+                logourl : {
+                    type : String,
+                    required : false
+                }
+            },
+    quizInfo :
+            {
+                lastattempted : {
+                    type: Date,
+                    required: false
+                },
+                percent :
+                {
+                    type : Number,
+                    required : false
                 }
             }
+        
 
 })
 

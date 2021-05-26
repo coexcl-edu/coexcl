@@ -9,7 +9,7 @@ var outRes={}
 
 router.post('/', async(req,res) => {
  var resloaded= false
-    if(!validation.ValidateEmail(req.body.email))
+    if(req.body.email != null && !validation.ValidateEmail(req.body.email))
     {
         resloaded= true
          outRes= {
@@ -18,40 +18,7 @@ router.post('/', async(req,res) => {
             msg : "Invalid email Id."
 
            } 
-          //  res.status(409).json(outRes);
-          //  return;
     }
-
-    const alien = new User(
-        {
-            name:req.body.name,
-            mobile: req.body.mobile,
-            subscribed: req.body.subscribed,
-            email: req.body.email,
-            personalInfo :
-                    {
-                        fatherName: req.body.personalInfo.fatherName,
-                        motherName: req.body.personalInfo.motherName,
-                        bloodGroup: req.body.personalInfo.bloodGroup,
-                        hobby: req.body.personalInfo.hobby,
-                        favouriteSport: req.body.personalInfo.favouriteSport
-                    },
-            academics :
-                    {
-                        class: req.body.academics.class,
-                        rollNo: req.body.academics.rollNo,
-                        favouriteSubject: req.body.academics.favouriteSubject
-                    },
-            schoolInfo :
-                    {
-                        schoolName: req.body.schoolInfo.schoolName,
-                        schoolCode: req.body.schoolInfo.schoolCode,
-                        city: req.body.schoolInfo.city,
-                        state: req.body.schoolInfo.state
-                    }
-        
-        })
-
 
     const checkUser={
         mobile: req.body.mobile
@@ -83,12 +50,84 @@ router.post('/', async(req,res) => {
       //  return;
     }); 
     console.log(resloaded)
-    try{
+    //try{
         if(!resloaded)
         {
-            console.log("before creation")
         const cred= await login.save()
-         await alien.save() 
+
+        var academic;
+        if(req.body.academics != null )
+        {
+        academic =
+        {
+                class: req.body.academics.class,
+                rollNo: req.body.academics.rollNo,
+                favouriteSubject: req.body.academics.favouriteSubject
+            
+        }
+        }
+        else
+        {
+            academic ={} 
+        }
+
+        var personInfo;
+        if(req.body.personalInfo != null )
+        {
+        personInfo =
+        {
+            fatherName: req.body.personalInfo.fatherName,
+            motherName: req.body.personalInfo.motherName,
+            bloodGroup: req.body.personalInfo.bloodGroup,
+            hobby: req.body.personalInfo.hobby,
+            favouriteSport: req.body.personalInfo.favouriteSport,
+            gender : req.body.personalInfo.gender,
+            parentContact : req.body.personalInfo.parentContact
+             
+        }
+        }
+        else
+        {
+            personInfo =
+        {} 
+        }
+
+        var schoolInf;
+        if(req.body.schoolInfo != null )
+        {
+            schoolInf =
+        {
+                schoolName: req.body.schoolInfo.schoolName,
+                schoolCode: req.body.schoolInfo.schoolCode,
+                city: req.body.schoolInfo.city,
+                state: req.body.schoolInfo.state,
+                logourl : req.body.schoolInfo.logourl
+            
+             
+        }
+        }
+        else
+        {
+            schoolInf =
+        {} 
+        }
+
+
+
+        const userData = new User(
+            {
+                name:req.body.name,
+                mobile: req.body.mobile,
+                userid: cred._id,
+                subscribed: req.body.subscribed,
+                email: req.body.email,
+                personalInfo : personInfo,
+                academics :academic,
+                schoolInfo :schoolInf
+            })
+
+
+         await userData.save() 
 
          outRes={
             response : true,
@@ -98,20 +137,66 @@ router.post('/', async(req,res) => {
         
     }
     res.json(outRes)
-    }catch(err){
-        res.send('Error')
-    }
+   // }catch(err){
+     //   res.send('Error')
+    //}
 })
 
-router.patch('/:id',async(req,res)=> {
-    try{
-        const alien = await Alien.findById(req.params.id) 
-        alien.sub = req.body.sub
-        const a1 = await alien.save()
-        res.json(a1)   
-    }catch(err){
-        res.send('Error')
-    }
+router.patch('/',async(req,res)=> {
+ // try{
+        const filter = {
+            userid : req.body.userid,
+        }
+        const userInfo = await User.findOne(filter) 
+
+                        if(req.body.personalInfo != undefined)
+                        {userInfo.personalInfo.fatherName=req.body.personalInfo.fatherName
+                        userInfo.personalInfo.motherName= req.body.personalInfo.motherName
+                        userInfo.personalInfo.bloodGroup= req.body.personalInfo.bloodGroup
+                        userInfo.personalInfo.hobby= req.body.personalInfo.hobby
+                        userInfo.personalInfo.favouriteSport= req.body.personalInfo.favouriteSport
+                        userInfo.personalInfo.gender= req.body.personalInfo.gender
+                        userInfo.personalInfo.parentContact= req.body.personalInfo.parentContact
+                        }
+                        if(req.body.academics != undefined)
+                        {userInfo.academics.class= req.body.academics.class
+                        userInfo.academics.rollNo= req.body.academics.rollNo
+                        userInfo.academics.favouriteSubject= req.body.academics.favouriteSubject
+                        }
+                        if(req.body.schoolInfo != undefined)
+                        {
+                        userInfo.schoolInfo.schoolName= req.body.schoolInfo.schoolName
+                        userInfo.schoolInfo.schoolCode= req.body.schoolInfo.schoolCode
+                        userInfo.schoolInfo.city= req.body.schoolInfo.city
+                        userInfo.schoolInfo.state= req.body.schoolInfo.state
+                        }
+                        if(req.body.quizInfo != undefined)
+                        {
+                        userInfo.quizInfo.lastattempted=req.body.quizInfo.lastattempted
+                        if(userInfo.quizInfo.percent==0 || userInfo.quizInfo.percent== null)
+                        {
+                            console.log("Inside if")
+                        userInfo.quizInfo.percent=req.body.quizInfo.percent
+                        }
+                        else
+                        {
+                        console.log("Inside else")
+                        userInfo.quizInfo.percent=(userInfo.quizInfo.percent+req.body.quizInfo.percent)/2
+                        }
+                    }
+
+         const ifupdated=await userInfo.save()
+
+         outRes={
+            response : true,
+            status : 200,
+            data : {userid: ifupdated._id}
+        }
+
+        res.json(outRes)   
+   // }catch(err){
+     //   res.send('Error')
+    //}
 
 })
 

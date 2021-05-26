@@ -1,32 +1,43 @@
 const express = require('express')
 const router = express.Router()
 const Video = require('../models/videoModel')
+var respJson
 
+router.post('/', async(req,res) => {
 
-router.get('/', async(req,res) => {
+    var query = {}
+   
+    if(req.body.subject != undefined || req.body.subject != null)
+        {
+            query['subject'] = req.body.subject
+        }
+    if(req.body.class != undefined || req.body.class != null)
+        {
+            query['class'] =req.body.class
+        }
+
+    console.log(query)
+
     try{
-           const links = await Video.find();
-           console.log("Inside Video details");
-res.json(links);
+           const links = await Video.find(query);
+           respJson={
+            response : true,
+            status : 200,
+            data : {
+                links}
+            }   
+
+res.json(respJson);
     }catch(err){
         res.send('Error ' + err);
     }
 })
 
-router.get('/:id', async(req,res) => {
-    try{
-        var query = { _id: req.params.id };
-           const link=await Video.findOne(query);
-           console.log("Inside Links of Class :"+req.params.class);
-res.json(link)
-    }catch(err){
-        res.send('Error ' + err)
-    }
-})
 
 
-router.post('/', async(req,res) => {
+router.post('/loadvideo', async(req,res) => {
     const link = new Video({
+        schoolcode: req.body.schoolcode,
         subject: req.body.subject,
         class : req.body.class,
         chaptername: req.body.chaptername,
@@ -36,7 +47,13 @@ router.post('/', async(req,res) => {
 console.log(link);
     try{
         const a1 =  await link.save() 
-        res.json(a1)
+        respJson={
+            response : true,
+            status : 200,
+            data : {
+                a1}
+            } 
+        res.json(respJson)
     }catch(err){
         res.send('Error')
     }
