@@ -9,14 +9,14 @@ const noticeSchema = new mongoose.Schema({
         required: true
     },
     class: {
-        type: String,
+        type: Number,
         required: true
     },
     notice :{
         type: String,
         required: true
     },
-    header :{
+    title :{
         type: String,
         required: true
     },
@@ -24,6 +24,14 @@ const noticeSchema = new mongoose.Schema({
         type: Date,
         required: true
     },
+    imageurl :{
+        type: String,
+        required: false
+    },
+    videourl :{
+        type: String,
+        required: false
+    }
 
 }
 )

@@ -4,6 +4,25 @@ const User = require('../models/userModel')
 const Login = require('../models/loginModel')
 const crypt = require("../common/crypt")
 const validation = require("../common/validation")
+const Multer = require('multer')
+const { Storage } = require("@google-cloud/storage")
+
+
+
+ const storage = new Storage(
+     {
+         projectId :"coexclapi",
+         keyFile :"C:\Users\ravkusha\Downloads\coexclapi-b71c027d99ad.json"
+     }
+ )   
+
+const bucket = storage.bucket("coexclbucket")
+const multer = Multer ({
+    storage : Multer.memoryStorage(),
+    limits : {
+        fileSize : 5 * 1024 *1024
+    }
+})
 
 var outRes={}
 
@@ -112,8 +131,6 @@ router.post('/', async(req,res) => {
         {} 
         }
 
-
-
         const userData = new User(
             {
                 name:req.body.name,
@@ -142,62 +159,106 @@ router.post('/', async(req,res) => {
     //}
 })
 
-router.patch('/',async(req,res)=> {
- // try{
+router.put('/',async(req,res)=> {
+  try{
         const filter = {
             userid : req.body.userid,
         }
+        console.log(filter);
         const userInfo = await User.findOne(filter) 
 
+        console.log(userInfo);
+
                         if(req.body.personalInfo != undefined)
-                        {userInfo.personalInfo.fatherName=req.body.personalInfo.fatherName
+                        {
+                        if(req.body.personalInfo.fatherName!= undefined)
+                        userInfo.personalInfo.fatherName=req.body.personalInfo.fatherName
+                        if(req.body.personalInfo.motherName!= undefined)
                         userInfo.personalInfo.motherName= req.body.personalInfo.motherName
+                        if(req.body.personalInfo.bloodGroup!= undefined)
                         userInfo.personalInfo.bloodGroup= req.body.personalInfo.bloodGroup
+                        if(req.body.personalInfo.hobby!= undefined)
                         userInfo.personalInfo.hobby= req.body.personalInfo.hobby
+                        if(req.body.personalInfo.favouriteSport!= undefined)
                         userInfo.personalInfo.favouriteSport= req.body.personalInfo.favouriteSport
+                        if(req.body.personalInfo.gender!= undefined)
                         userInfo.personalInfo.gender= req.body.personalInfo.gender
+                        if(req.body.personalInfo.parentContact!= undefined)
                         userInfo.personalInfo.parentContact= req.body.personalInfo.parentContact
-                        }
-                        if(req.body.academics != undefined)
-                        {userInfo.academics.class= req.body.academics.class
+                    }
+
+                    if(req.body.academics != undefined)
+                    {
+                        if( req.body.academics.class!= undefined)
+                        userInfo.academics.class= req.body.academics.class
+                        if(req.body.academics.rollNo!= undefined)
                         userInfo.academics.rollNo= req.body.academics.rollNo
+                        if(req.body.academics.favouriteSubject!= undefined)
                         userInfo.academics.favouriteSubject= req.body.academics.favouriteSubject
-                        }
-                        if(req.body.schoolInfo != undefined)
-                        {
+                    }
+
+                    if(req.body.schoolInfo != undefined)
+                    {
+                        if(req.body.schoolInfo.schoolName!= undefined)
                         userInfo.schoolInfo.schoolName= req.body.schoolInfo.schoolName
+                        if(req.body.schoolInfo.schoolCode!= undefined)
                         userInfo.schoolInfo.schoolCode= req.body.schoolInfo.schoolCode
+                        if(req.body.schoolInfo.city!= undefined)
                         userInfo.schoolInfo.city= req.body.schoolInfo.city
+                        if(req.body.schoolInfo.state!= undefined)
                         userInfo.schoolInfo.state= req.body.schoolInfo.state
-                        }
-                        if(req.body.quizInfo != undefined)
-                        {
+                    }
+
+                    if(req.body.quizInfo != undefined)
+                    {
+                        if(req.body.quizInfo.lastattempted!= undefined)
                         userInfo.quizInfo.lastattempted=req.body.quizInfo.lastattempted
+                        if(req.body.quizInfo.percent != undefined)
+                        {
                         if(userInfo.quizInfo.percent==0 || userInfo.quizInfo.percent== null)
                         {
-                            console.log("Inside if")
                         userInfo.quizInfo.percent=req.body.quizInfo.percent
                         }
                         else
                         {
-                        console.log("Inside else")
                         userInfo.quizInfo.percent=(userInfo.quizInfo.percent+req.body.quizInfo.percent)/2
                         }
                     }
+                }
+                        
 
          const ifupdated=await userInfo.save()
 
          outRes={
             response : true,
             status : 200,
-            data : {userid: ifupdated._id}
+            data : {userDtls: ifupdated}
         }
 
         res.json(outRes)   
-   // }catch(err){
-     //   res.send('Error')
-    //}
+    }catch(err){
+        res.send('Error')
+    }
 
 })
+
+
+router.get("/leaderboard/:count",async(req, res)=> {
+
+    const doccount= parseInt(req.params.count,10)
+    const resp =await User.find({},{'_id':-1})
+    .select('quizInfo.percent as percent')
+    .select('name')
+    .where('quizInfo.percent').ne(null)
+    .limit(doccount)
+    .sort({'quizInfo.percent' :-1})
+    .exec();
+
+    console.log(resp);
+    res.json(resp)
+
+})
+
+
 
 module.exports = router

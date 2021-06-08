@@ -65,18 +65,97 @@ router.post('/validuser', async(req,res) => {
     }
 })
 
-router.patch('/:id',async(req,res)=> {
+router.post('/reset',async(req,res)=> {
+
+
+    const queryParam = {
+        mobile : req.body.mobile,
+    }
     try{
-        const alien = await Login.findById(req.params.id) 
-        alien.sub = req.body.sub
-        const a1 = await alien.save()
-        res.json(a1)   
+        const userRetrieved = await Login.findOne(queryParam) 
+        userRetrieved.password = crypt.encryptpwd(req.body.password)
+        const updated = await userRetrieved.save()
+
+        if(updated != null || updated!= undefined)
+        outRes={
+            response : true,
+            status : 200,
+            data : "Password reset Successfully."
+        }
+        else 
+        {
+            outRes={
+                response : true,
+                status : 200,
+                data : "Failed to reset the password."
+            } 
+        }
+
+        res.json(outRes)   
     }catch(err){
         res.send('Error')
     }
-
 })
 
+
+router.post('/change',async(req,res)=> {
+
+
+    var query = {}
+
+    query['mobile'] =req.body.mobile
+
+    const isuserexist = await Login.findOne(query) 
+    if(isuserexist == undefined || isuserexist== null)
+    {
+        outRes={
+            response : true,
+            status : 200,
+            data : "Invalid phone number."
+        }
+    }
+   else{
+    console.log(crypt.decryptpwd(isuserexist.password))
+
+    console.log(req.body.oldpassword)
+   // try{
+     //   const userRetrieved = await Login.findOne(query) 
+
+        if(req.body.oldpassword != crypt.decryptpwd(isuserexist.password))
+        {
+            outRes={
+                response : true,
+                status : 200,
+                data : "Old password is incorrect."
+            }
+        }
+        else
+        {
+        isuserexist.password = crypt.encryptpwd(req.body.newpassword)
+        const updated = await isuserexist.save()
+
+        if(updated != null || updated!= undefined)
+        outRes={
+            response : true,
+            status : 200,
+            data : "Password changed Successfully."
+        }
+        else 
+        {
+            outRes={
+                response : true,
+                status : 200,
+                data : "Failed to change the password."
+            } 
+        }
+    }
+   }
+        res.json(outRes)   
+        
+    //}catch(err){
+     //   res.send('Error')
+   // }
+})
 
   
 

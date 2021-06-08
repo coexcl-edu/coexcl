@@ -5,15 +5,22 @@ const User = require('../models/userModel')
 
 router.post('/', async(req,res) => {
     const noticeObj = new Notice({
-        schoolId : user.body.schoolId,
-        class : user.body.class,
-        notice : user.body.notice,
-        header : user.body.header,
-        date : user.body.date,
+        schoolId : req.body.schoolId,
+        class : req.body.class,
+        title : req.body.title,
+        notice : req.body.notice,
+        date : req.body.date,
+        videourl : req.body.videourl,
+        imageurl : req.body.imageurl
     })
     try{
-      const notice=await noticeObj.save();
-           res.status(200).json(notice)
+      const noticeResult=await noticeObj.save();
+      outRes={
+        response : true,
+        status : 200,
+        data : {notices :noticeResult}
+    }
+        res.status(200).json(outRes)
     }catch(err){
         res.send('Error')
     }
@@ -22,17 +29,38 @@ router.post('/', async(req,res) => {
 
 router.get('/:userId', async(req,res) => {
     const userParam = {
-        userId : req.params.userId,
+        userid : req.params.userId,
     }
     try{
       const user=await User.findOne(userParam);
-
+        if(user== null)
+        {
+            outRes={
+                response : true,
+                status : 200,
+                data : "Invalid user."
+            }
+        }
+        else{
       const noticeParam = {
-        schoolId : user.schoolInfo.schoolId,
+        schoolId : user.schoolInfo.schoolCode,
         class : user.academics.class
       }
-        res.status(200).json(noticeParam)
+
+      const noticeres=await Notice.findOne(noticeParam);
+
+      outRes={
+        response : true,
+        status : 200,
+        data : {notices:noticeres}
+    }
+    }
+
+        res.status(200).json(outRes)
     }catch(err){
         res.send('Error')
     }
 })
+
+
+module.exports = router

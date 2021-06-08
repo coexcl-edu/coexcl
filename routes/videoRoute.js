@@ -3,7 +3,7 @@ const router = express.Router()
 const Video = require('../models/videoModel')
 var respJson
 
-router.post('/', async(req,res) => {
+router.post('/getvideo', async(req,res) => {
 
     var query = {}
    

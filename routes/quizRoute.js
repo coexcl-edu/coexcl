@@ -14,9 +14,15 @@ router.get('/coexcl', async(req,res) => {
 
 router.get('/school', async(req,res) => {
     try{
-        var query = { schoolcode: req.body.schoolcode };
-        console.log(query)
-           const quiz=await Quiz.find(query)
+       // var query = { schoolcode: req.body.schoolcode };
+       // console.log(query)
+
+       const quiz= await Quiz.aggregate([  
+            { $sample: {size: 2} }//, 
+           // { $match:  {"schoolcode": req.body.schoolcode} } 
+          ])
+
+           //const quiz=await Quiz.find(query)
            res.json(quiz)
     }catch(err){
         res.send('Error ' + err)

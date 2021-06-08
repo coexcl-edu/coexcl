@@ -24,6 +24,10 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: false
     },
+    profileimgurl: {
+        type: String,
+        required: false
+    },
 	personalInfo :
             {
                 gender: {
