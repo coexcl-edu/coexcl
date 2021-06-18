@@ -4,7 +4,11 @@ const mongoose = require('mongoose')
 const quizSchema = new mongoose.Schema({
 
     schoolcode: {
-        type: String,
+        type: Number,
+        required: true
+    },
+    subject: {
+        type: Number,
         required: true
     },
     subject: {

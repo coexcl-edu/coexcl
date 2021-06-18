@@ -53,6 +53,9 @@ app.use('/notice',noticeRouter)
 const liveClassRouter = require('./routes/liveClassRoute')
 app.use('/liveclass',liveClassRouter)
 
+const funFactRouter = require('./routes/funFactRoute')
+app.use('/funfacts',funFactRouter)
+
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
   console.log(`App listening on port ${PORT}`);

@@ -30,18 +30,15 @@ router.post('/validuser', async(req,res) => {
     try{
       const loginfound=await Login.findOne(checklogin);
       if(loginfound== null)
-      return res.status(401).json(null)
+      return res.status(200).json(  outRes={
+        response : false,
+        status : 401,
+        data : "Mobile number not registered. Please do signup and proceed."
+    })
      var dbPwd= crypt.decryptpwd(loginfound.password);
-	  console.log("result::"+loginfound);
-
-      console.log("Body Passwrod::"+req.body.password)
-      console.log("Pwd::"+loginfound.password)
-      console.log("dbPwd::"+crypt.decryptpwd(loginfound.password))
-      if(req.body.password==crypt.decryptpwd(loginfound.password))
+      if(req.body.password==dbPwd)
       {
        const userDtls=await User.findOne({mobile: req.body.mobile})
-        const resp={userId: loginfound._id,
-             userDtls}
 
              outRes={
                 response : true,
@@ -49,17 +46,17 @@ router.post('/validuser', async(req,res) => {
                 data : {
                     userDtls}
             }
-           res.status(200).json(outRes)
       }
-           else
-           {
+    else
+        {
             outRes={
-                response : true,
+                response : false,
                 status : 401,
-                data : "Invaid User"
+                data : "Wrong password provided."
             }
-            res.status(401).json(outRes)
         }
+        console.log(outRes)
+        res.status(200).json(outRes)
     }catch(err){
         res.status(500).send('Error')
     }

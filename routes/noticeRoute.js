@@ -47,7 +47,7 @@ router.get('/:userId', async(req,res) => {
         class : user.academics.class
       }
 
-      const noticeres=await Notice.findOne(noticeParam);
+      const noticeres=await Notice.find(noticeParam);
 
       outRes={
         response : true,

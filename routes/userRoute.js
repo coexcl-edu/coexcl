@@ -144,12 +144,14 @@ router.post('/', async(req,res) => {
             })
 
 
-         await userData.save() 
+        const tempUserDtls= await userData.save() 
+
+         const userDtls=await User.findOne({mobile: tempUserDtls.mobile})
 
          outRes={
             response : true,
             status : 200,
-            data : {userid: cred._id}
+            data : {userDtls}
         }
         
     }
@@ -164,9 +166,27 @@ router.put('/',async(req,res)=> {
         const filter = {
             userid : req.body.userid,
         }
-        console.log(filter);
+        
         const userInfo = await User.findOne(filter) 
 
+        if(userInfo == null)
+        {
+        outRes={
+            response : false,
+            status : 200,
+            data : "Invalid user updation."
+        }
+        }
+        else{
+        console.log(userInfo);
+        if(req.body.name != undefined)
+        {
+            userInfo.name= req.body.name
+        }
+        if(req.body.email != undefined)
+        {              
+            userInfo.email= req.body.email
+        }
         console.log(userInfo);
 
                         if(req.body.personalInfo != undefined)
@@ -234,6 +254,7 @@ router.put('/',async(req,res)=> {
             status : 200,
             data : {userDtls: ifupdated}
         }
+    }
 
         res.json(outRes)   
     }catch(err){
