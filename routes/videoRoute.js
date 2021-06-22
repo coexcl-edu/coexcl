@@ -15,6 +15,14 @@ router.post('/getvideo', async(req,res) => {
         {
             query['class'] =req.body.class
         }
+    if(req.body.schoolcode != undefined || req.body.schoolcode != null)
+        {
+            if(req.body.schoolcode=='00000001')
+            query['schoolcode']='COX00001'
+            else            
+            query['schoolcode'] =req.body.schoolcode
+        }
+   
 
     console.log(query)
 
